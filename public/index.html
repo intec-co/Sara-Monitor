@@ -1,0 +1,104 @@
+<head>
+	<script src="linePlot.js"></script>
+	<link rel="stylesheet" type="text/css" href="Style.css">
+	<title>Monitor Materno Fetal | Cim@lab</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<!--ECG--> 
+	<canvas id="ecgPlot" width="1200" height="266"
+			style="border:1px solid #000000;">
+	</canvas>
+	<!--<div id="frec">
+		 <div id="ECG">
+		<center><h1>100</h1></center>
+		<center><h3>ECG</h3></center>
+		</div> 
+	</div>-->
+
+	<!-- Baby beat -->
+	<canvas id="ecgBabePlot" width="1200" height="266" style="border:1px solid #000000; margin-top:16;">
+		<!--<canvas id="BAB" width="84"; height="111.72"; 
+	 style="border:3px solid #000">
+		<center><h1>100</h1></center>
+		<center><h3>Baby beat</h3></center>
+		</canvas>-->
+
+	</canvas> 
+	<!-- <div id="frec">-->
+	<!-- </div>-->
+
+	<!--SpO2 -->
+	<canvas id="spo2Plot" width="600" height="266" style="border:1px solid #000000; margin-top:16; float:left;">
+	</canvas> 
+	<!-- <div id="SpoFrec">
+	
+	<div id="SPO">
+		<center><h1>100</h1></center>
+		<center><h3>SpO2</h3></center>
+		</div>
+	</div>-->
+
+	<div id="Start">
+		<h2 class="startText">START</h2>
+	</div>
+	<div id="Stop">
+		<h2 class="startText" >STOP</h2>
+	</div>
+
+	<div id="Mes">
+		<h1 class="in">100</h1>
+		<h6 class="inDiastole">Dístole</h6>
+	</div>
+	<div id="MAD">
+		<h3 class="in">100</h3><h6  class="inMAD">MAD</h6>
+	</div>
+	<div id="Sis">
+		<h1 class="in">100</h1><h6  class="inDiastole">Sístole</h6>
+	</div>
+
+	<!-- Logos -->
+	<div id="something">
+		<a href="http://cimlaboratory.com" target="_blank"><img id="logofoot" src="Assets/cimalabwhite.png"></img></a>
+		<a href="http://www.telemedicina.unal.edu.co/" target="_blank"><img id="logofoot" src="Assets/logo-white.png"></img></a>
+	</div>
+
+</body>
+
+<footer>
+	<script>
+		var ecg = new Graph({canvasId: 'ecgPlot', color: '#859F10', thickness: '2', background: 'white', colorRefresh: '#859F10'});
+		var ecgBabe = new Graph({canvasId: 'ecgBabePlot', color: '#1876EF', thickness: '2', background: 'white', colorRefresh: '#1876EF'});
+		var spo2 = new Graph({canvasId: 'spo2Plot', color: '#B92312', thickness: '2', background: 'white', colorRefresh: '#B92312'});
+
+		waitToPaint(0);
+
+		function waitToPaint(value)
+		{
+			value++;
+			if (value === 60)
+			{
+				value = 0;
+			}
+			setTimeout(function () {
+				paintPoint(value);
+			}, 10);
+		}
+
+		function paintPoint(value)
+		{
+			ecgBabe.drawNewData(value + 30);
+			spo2.drawNewData(value + 30);
+			waitToPaint(value);
+		}
+		var host = window.document.location.host.replace(/:.*/, '');
+		var ws = new WebSocket('ws://' + host + ':8081');
+		ws.onmessage = function (event) {
+                    var msg = JSON.parse(event.data);
+                    if(msg.counter !== undefined)
+			ecg.drawNewData(parseInt(msg.counter));
+		};
+	</script>
+</footer>

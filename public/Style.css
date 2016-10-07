@@ -1,0 +1,208 @@
+@font-face {
+src:url(FjallaOne-Regular.otf);
+    font-family:myFirstFont;
+	font-style:normal;
+}
+
+h1,h2,h3,h4,h5,h6,h7,p,div{
+    font-family:myFirstFont;
+}
+h1{
+font-size:40px;
+ line-height: 70%;
+}
+h1.Mom{
+line-height: 100%;
+}
+h1.in{
+line-height: 100%;
+padding-left:15%; 
+margin-top:20%;
+position:center;
+font-size:70px;
+}
+h6.inDiastole{
+line-height: 100%;
+position:center;
+text-align: center;
+}
+h6.inMAD{
+line-height: 100%;
+padding-left:45%; 
+position:center;
+}
+h3.in{
+line-height: 100%;
+padding-left:28%; 
+padding-top:0%;
+position:center;
+font-size:40px;
+}
+h2,h3{
+ line-height: 30%;
+}
+body { 
+width:1200px;
+height:800px;
+background-color:#1D2E39;
+}
+
+#searchBar
+{
+ height: 12%;
+ width: 100%; 
+ background-color:#3CBACA;
+ padding-left:0px;
+ padding-right:0px;
+ padding-top:0px;
+ padding-bottom:0px;
+ margin:0px 0px 0px 0px;
+}
+
+#patientForm
+{
+float:left;
+width:75%;
+margin-top:3%;
+margin-left:2%;
+color: white;
+font-style:normal;
+}
+
+#logo{
+ height: auto;
+ width: 25%;
+ margin-left:0px;
+ margin-right:0px;
+margin-top:5%;
+ float:right;
+}
+
+#frec{
+height:33.3%;
+width:100%;
+float:left;
+background-color:#fff;
+background-size: 30px 30px;    
+<!-- background-image:repeating-linear-gradient(0deg, #000, #000 1px, transparent 1px, transparent 90px),repeating-linear-gradient(-90deg, #000, #000 1px, transparent 1px, transparent 90px); -->
+border:3px solid #fff;
+margin-bottom:2%;
+}
+
+#SpoFrec{
+height:33.3%;
+width:50%;
+float:left;
+background-color:#fff;
+border:3px solid #fff;
+margin-bottom:2%;
+}
+
+#textfoot{
+ height: auto;
+ width: 15%;
+ margin-left:2px;
+ margin-right:0px;
+margin-top:3%;
+ float:left;
+ color:white;
+}
+
+#ECG,#SPO,#BAB{
+width:7%;
+height:42%;
+float:right;
+position:relative;
+border:3px solid #000;
+}
+
+#ECG{
+background-color:#ECEA20;
+}
+#SPO{
+width:10%;
+background-color:#43B906;
+}
+#BAB{
+background-color:#38A7EF;
+}
+
+#MomData{
+width:13%;
+height:33.3%;
+background:white;
+float:right;
+}
+
+#Start{
+width:6%;
+height:20%;
+background:#6DFF22;
+float:left;
+position:relative;
+margin-left:2%;
+margin-top:16;
+}
+
+h2.startText{
+padding-left:0%;
+padding-top:70%;
+text-align: center;
+}
+
+#Stop{
+width:6%;
+height:20%;
+background:#02390C;
+float:left;
+position:relative;
+color:white;
+margin-left:0%;
+margin-top:16;
+}
+
+#Mes{
+width:12%;
+height:20%;
+float:left;
+background-color:#fff;
+display: inline-block;
+margin-left:0%;
+margin-top:16;
+}
+
+#Sis{
+width:11.5%;
+height:20%;
+float:left;
+background-color:#fff;
+display: inline-block;
+margin-left:0%;
+margin-top:16;
+}
+
+#Mad{
+width:12%;
+height:20%;
+float:left;
+background-color:#BDEC00;
+margin-left:0%;
+margin-top:16;
+}
+
+#Something{
+width:47%;
+height:14%;
+float:left;
+display: inline-block;
+margin-left:2%;
+}
+
+#logofoot{
+ height: auto;
+ width: 40%;
+ margin-left:0px;
+ margin-right:0px;
+margin-top:5%;
+ float:right;
+}
