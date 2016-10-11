@@ -7,6 +7,23 @@ src:url(FjallaOne-Regular.otf);
 h1,h2,h3,h4,h5,h6,h7,p,div{
     font-family:myFirstFont;
 }
+h2.circle{
+    width:100%;
+    margin-left: 15px;
+    color:#1D2E39;
+}
+
+h2.circleActive{
+    width:100%;
+    margin-left: 15px;
+    color:#19CCD2;
+}
+
+h4.deriva{
+    color: #fff;
+    float:left;
+}
+
 h1{
 font-size:40px;
  line-height: 70%;
@@ -14,6 +31,19 @@ font-size:40px;
 h1.Mom{
 line-height: 100%;
 }
+
+h2.sigid{
+    color: #19CCD2;
+     float:left;
+     display: inline-block;
+}
+
+h2.fetsigid{
+    color: #0FDF70;
+     float:left;
+     display: inline-block;
+}
+
 h1.in{
 line-height: 100%;
 padding-left:15%; 
@@ -191,11 +221,11 @@ margin-top:16;
 }
 
 #Something{
-width:47%;
-height:14%;
-float:left;
+width:40%;
+height:auto;
+float:right;
 display: inline-block;
-margin-left:2%;
+margin-left:0%;
 }
 
 #logofoot{
@@ -205,4 +235,45 @@ margin-left:2%;
  margin-right:0px;
 margin-top:5%;
  float:right;
+}
+
+#logos{
+ height: auto;
+ width: 30%;
+ margin-left:0px;
+ margin-right:0px;
+margin-top:5%;
+ float:right;
+}
+
+#SignalIdentifier{
+    height: auto;
+    width: 100%;
+    float:left;
+}
+
+#momSignalOptions{
+    height: 20px;
+    width: auto;
+    float:left;
+    padding-left: 50px;
+    padding-top: 10px;
+    padding-bottom: 0px;
+}
+
+#formtext{
+    font-family:myFirstFont;
+    font-size: 19px;
+}
+
+#derMom{
+      width: 50px;
+      height: 50px;
+      //background-color: #38F9FF;
+      background-color: #fff;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      float: left;
+      margin-left: 30px;
 }
