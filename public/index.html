@@ -9,9 +9,9 @@
 <body>
 	<!--ECG--> 
         <div id="SignalIdentifier">
-            <h2 class="sigid">Señal Materna</h2><h4 class="deriva">&nbsp;&nbsp;| Derivación</h4>
+            <h4 class="deriva">Seleccionar señal | </h4>
             
-         <!--   <form id="momSignalOptions" action="demo_form.asp" method="get">
+        <form id="momSignalOptions" action="demo_form.asp" method="get">
             <input list="momSignal">
             <datalist id="momSignal">
                 <option id="formtext" value="Derivación 1"></option>
@@ -19,12 +19,7 @@
                 <option value="Derivación 3"></option>
                 <option value="Derivación 4"></option>
             </datalist>
-           </form>--> 
-         
-        <div id="derMom"> <h2 class="circleActive">&nbsp;I</h2> </div>
-        <div id="derMom"> <h2 class="circle">II</h2> </div>
-        <div id="derMom"> <h2 class="circle">III</h2> </div>
-        
+           </form>
         </div>
             
 	<canvas id="ecgPlot" width="1200" height="250" style="border:1px solid #000000;">
@@ -33,7 +28,7 @@
 
 	<!-- Baby beat -->
                 <div id="SignalIdentifier">
-            <h2 class="fetsigid">Señal Fetal</h2><h4 class="deriva">&nbsp;&nbsp;| Derivación</h4>
+           <h4 class="deriva">Seleccionar señal | </h4>
            <form id="momSignalOptions" action="demo_form.asp" method="get">
             <input list="momSignal">
             <datalist id="momSignal">
@@ -89,22 +84,8 @@
                     if(msg.counter !== undefined)
 			ecg.drawNewData(parseInt(msg.counter));
 		};
-                
-                
-   $.ajax({
-    url: "Downloads/a01.csv",
-    async: false,
-    success: function (csvd) {
-        data = $.csv.toArrays(csvd);
-        console.log(data);
-    },
-    dataType: "text",
-    complete: function () {
-        // call a function on complete 
-    }
-    
-  
-});
+                 
+                 
 	</script>
 
      
