@@ -6,6 +6,8 @@ var WebSocketServer = require('ws').Server;
 var wss;
 var wsConnection;
 var counter = 100;
+var reader;
+var viewer;
 
 module.exports = function (server) {
     wss = new WebSocketServer({server: server});
@@ -26,14 +28,20 @@ module.exports = function (server) {
             var iMsg = JSON.parse(message);
             switch (iMsg.action)
             {
+                case 'register':
+                    if (message.type == 'reader') {
+                        reader = ws;
+                    } else if (message.type == 'viewer') {
+                        viewer = ws;
+                    }
+                    break;
+                case 'data':
+                    if(viewer!==undefined){
+                        viewer.send(message);
+                    }
+
+                    break;
             }
         });
-        setInterval(function () {
-            var msg = {counter: counter};
-            ws.send(JSON.stringify(msg));
-            counter -= 2;
-            if (counter === 0)
-                counter = 100;
-        }, 10);
     });
 };
