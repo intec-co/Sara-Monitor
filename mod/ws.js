@@ -25,17 +25,24 @@ module.exports = function (server) {
             //ToDo delete chatRoom[obj.id];
         });
         ws.on('message', function (message) {
+            console.log(">>"+message);
+            
             var iMsg = JSON.parse(message);
+            
             switch (iMsg.action)
             {
                 case 'register':
-                    if (message.type == 'reader') {
+                    
+                    if (iMsg.type === 'reader') {
                         reader = ws;
-                    } else if (message.type == 'viewer') {
-                        viewer = ws;
+                    } else if (iMsg.type === 'viewer') {
+                        viewer = this;
+                        
                     }
+                    console.log(">>>"+viewer);
                     break;
                 case 'data':
+                    console.log("::"+viewer);
                     if(viewer!==undefined){
                         viewer.send(message);
                     }

@@ -33,6 +33,7 @@ var server = http.createServer(function (request, response) {
 			httpGet(response, pathComp, {compress: false, minify: false});
 	}
 });
+
 server.listen(port, function () {
 	console.log('Running server 1.0 in port:', port);
 	console.log(new Date);

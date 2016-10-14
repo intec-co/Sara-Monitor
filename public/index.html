@@ -1,40 +1,40 @@
 <head>
-	<script src="linePlot.js"></script>
-	<link rel="stylesheet" type="text/css" href="Style.css">
-	<title>Monitor Materno Fetal | Cim@lab</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="UTF-8">
+    <script src="linePlot.js"></script>
+    <link rel="stylesheet" type="text/css" href="Style.css">
+    <title>Monitor Materno Fetal | Cim@lab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 </head>
 
 <body>
-	<!--ECG--> 
-        <div id="SignalIdentifier">
-            <h2 class="sigid">Señal Materna</h2><h4 class="deriva">&nbsp;&nbsp;| Derivación</h4>
-            
-         <!--   <form id="momSignalOptions" action="demo_form.asp" method="get">
-            <input list="momSignal">
-            <datalist id="momSignal">
-                <option id="formtext" value="Derivación 1"></option>
-                <option value="Derivación 2"></option>
-                <option value="Derivación 3"></option>
-                <option value="Derivación 4"></option>
-            </datalist>
-           </form>--> 
-         
+    <!--ECG--> 
+    <div id="SignalIdentifier">
+        <h2 class="sigid">Señal Materna</h2><h4 class="deriva">&nbsp;&nbsp;| Derivación</h4>
+
+        <!--   <form id="momSignalOptions" action="demo_form.asp" method="get">
+           <input list="momSignal">
+           <datalist id="momSignal">
+               <option id="formtext" value="Derivación 1"></option>
+               <option value="Derivación 2"></option>
+               <option value="Derivación 3"></option>
+               <option value="Derivación 4"></option>
+           </datalist>
+          </form>--> 
+
         <div id="derMom"> <h2 class="circleActive">&nbsp;I</h2> </div>
         <div id="derMom"> <h2 class="circle">II</h2> </div>
         <div id="derMom"> <h2 class="circle">III</h2> </div>
-        
-        </div>
-            
-	<canvas id="ecgPlot" width="1200" height="250" style="border:1px solid #000000;">
-     
-	</canvas>
 
-	<!-- Baby beat -->
-                <div id="SignalIdentifier">
-            <h2 class="fetsigid">Señal Fetal</h2><h4 class="deriva">&nbsp;&nbsp;| Derivación</h4>
-           <form id="momSignalOptions" action="demo_form.asp" method="get">
+    </div>
+
+    <canvas id="ecgPlot" width="1200" height="250" style="border:1px solid #000000;">
+
+    </canvas>
+
+    <!-- Baby beat -->
+    <div id="SignalIdentifier">
+        <h2 class="fetsigid">Señal Fetal</h2><h4 class="deriva">&nbsp;&nbsp;| Derivación</h4>
+        <form id="momSignalOptions" action="demo_form.asp" method="get">
             <input list="momSignal">
             <datalist id="momSignal">
                 <option id="formtext" value="Derivación 1"></option>
@@ -42,74 +42,72 @@
                 <option value="Derivación 3"></option>
                 <option value="Derivación 4"></option>
             </datalist>
-           </form>
-        </div>
-	<canvas id="ecgBabePlot" width="1200" height="250" style="border:1px solid #000000; margin-top:16;">
-	</canvas> 
-        
-<!-- Logos -->
-	<div id="something">
-		<a href="http://cimlaboratory.com" target="_blank"><img id="logos" src="Assets/cimalabwhite.png"></img></a>
-		<a href="http://www.telemedicina.unal.edu.co/" target="_blank"><img id="logos" src="Assets/logo-white.png"></img></a>
-	</div>
+        </form>
+    </div>
+    <canvas id="ecgBabePlot" width="1200" height="250" style="border:1px solid #000000; margin-top:16;">
+    </canvas> 
+
+    <!-- Logos -->
+    <div id="something">
+        <a href="http://cimlaboratory.com" target="_blank"><img id="logos" src="Assets/cimalabwhite.png"></img></a>
+        <a href="http://www.telemedicina.unal.edu.co/" target="_blank"><img id="logos" src="Assets/logo-white.png"></img></a>
+    </div>
+
+    <script>
+        var ecg = new Graph({canvasId: 'ecgPlot', color: '#859F10', thickness: '2', background: 'white', colorRefresh: '#859F10'});
+        var ecgBabe = new Graph({canvasId: 'ecgBabePlot', color: '#1876EF', thickness: '2', background: 'white', colorRefresh: '#1876EF'});
+        //var spo2 = new Graph({canvasId: 'spo2Plot', color: '#B92312', thickness: '2', background: 'white', colorRefresh: '#B92312'});
+
+        waitToPaint(0);
+
+        function waitToPaint(value)
+        {
+            value++;
+            if (value === 360)
+            {
+                value = 0;
+            }
+            setTimeout(function () {
+                paintPoint(value);
+            }, 10);
+        }
+
+        function paintPoint(value)
+        {            
+            ecgBabe.drawNewData(60+Math.sin(value * (Math.PI / 180))*50);
+            //spo2.drawNewData(value + 30);
+            waitToPaint(value);
+        }
+        var host = window.document.location.host.replace(/:.*/, '');
+        var ws = new WebSocket('ws://' + host + ':8081');
+        ws.onopen = function (event) {
+            alert("WS opened");
+            var obj = {action: 'register', type: 'viewer'};
+            ws.send(JSON.stringify(obj));
+        };
+
+        ws.onmessage = function (event) {
+            
+            var msg = JSON.parse(event.data);
+            if (msg.counter !== undefined)
+                ecg.drawNewData(parseInt(msg.counter));
+        };
+
+
+        /*$.ajax({
+            url: "Downloads/a01.csv",
+            async: false,
+            success: function (csvd) {
+                data = $.csv.toArrays(csvd);
+                console.log(data);
+            },
+            dataType: "text",
+            complete: function () {
+                // call a function on complete 
+            }
+
+
+        });*/
+    </script>
 
 </body>
-
-
-	<script>
-		var ecg = new Graph({canvasId: 'ecgPlot', color: '#859F10', thickness: '2', background: 'white', colorRefresh: '#859F10'});
-		var ecgBabe = new Graph({canvasId: 'ecgBabePlot', color: '#1876EF', thickness: '2', background: 'white', colorRefresh: '#1876EF'});
-		var spo2 = new Graph({canvasId: 'spo2Plot', color: '#B92312', thickness: '2', background: 'white', colorRefresh: '#B92312'});
-
-		waitToPaint(0);
-
-		function waitToPaint(value)
-		{
-			value++;
-			if (value === 60)
-			{
-				value = 0;
-			}
-			setTimeout(function () {
-				paintPoint(value);
-			}, 10);
-		}
-
-		function paintPoint(value)
-		{
-			ecgBabe.drawNewData(value + 30);
-			spo2.drawNewData(value + 30);
-			waitToPaint(value);
-		}
-		var host = window.document.location.host.replace(/:.*/, '');
-                alert(host);
-		var ws = new WebSocket('ws://' + host + ':8081');
-		ws.onopen = function (event) {
-			var obj={action: 'register', type:'viewer'};
-			ws.send(JSON.stringify(obj));
-		};
-		
-		ws.onmessage = function (event) {
-                    var msg = JSON.parse(event.data);
-                    if(msg.counter !== undefined)
-			ecg.drawNewData(parseInt(msg.counter));
-		};
-                
-                
-   $.ajax({
-    url: "Downloads/a01.csv",
-    async: false,
-    success: function (csvd) {
-        data = $.csv.toArrays(csvd);
-        console.log(data);
-    },
-    dataType: "text",
-    complete: function () {
-        // call a function on complete 
-    }
-    
-  
-});
-	</script>
-
-     
