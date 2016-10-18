@@ -48,8 +48,6 @@
 		<a href="http://www.telemedicina.unal.edu.co/" target="_blank"><img id="logos" src="Assets/logo-white.png"></img></a>
 	</div>
 
-</body>
-
 
 	<script>
 		var ecg = new Graph({canvasId: 'ecgPlot', color: '#859F10', thickness: '2', background: 'white', colorRefresh: '#859F10'});
@@ -72,7 +70,8 @@
 
 		function paintPoint(value)
 		{
-			ecgBabe.drawNewData(value + 30);
+			//ecgBabe.drawNewData(value + 30);
+                        ecgBabe.drawNewData(60+Math.sin(value * (Math.PI / 180))*50);
 			//spo2.drawNewData(value + 30);
 			waitToPaint(value);
 		}
@@ -95,3 +94,5 @@
 	</script>
 
      
+
+</body>
