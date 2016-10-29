@@ -7,11 +7,11 @@
 </head>
 
 <body>
-	<!--ECG--> 
+	<!--SIGNAL 1--> 
         <div id="SignalIdentifier">
             <h4 class="deriva">Seleccionar señal | </h4>
             
-        <form id="momSignalOptions" action="demo_form.asp" method="get">
+        <form id="SignalA" action="demo_form.asp" method="get">
             <input list="momSignal">
             <datalist id="momSignal">
                 <option id="formtext" value="Derivación 1"></option>
@@ -22,14 +22,15 @@
            </form>
         </div>
             
-	<canvas id="ecgPlot" width="1200" height="250" style="border:1px solid #000000;">
+	<canvas id="SignalFirst" width="1200" height="250" style="border:1px solid #000000;">
      
 	</canvas>
 
-	<!-- Baby beat -->
-                <div id="SignalIdentifier">
-           <h4 class="deriva">Seleccionar señal | </h4>
-           <form id="momSignalOptions" action="demo_form.asp" method="get">
+	<!-- SIGNAL 2 -->
+        <div id="SignalIdentifier">
+            <h4 class="deriva">Seleccionar señal | </h4>
+            
+        <form id="SignalB" action="demo_form.asp" method="get">
             <input list="momSignal">
             <datalist id="momSignal">
                 <option id="formtext" value="Derivación 1"></option>
@@ -39,7 +40,8 @@
             </datalist>
            </form>
         </div>
-	<canvas id="ecgBabePlot" width="1200" height="250" style="border:1px solid #000000; margin-top:16;">
+            
+	<canvas id="SignalSecond" width="1200" height="250" style="border:1px solid #000000; margin-top:16;">
 	</canvas> 
         
 <!-- Logos -->
@@ -48,17 +50,15 @@
 		<a href="http://www.telemedicina.unal.edu.co/" target="_blank"><img id="logos" src="Assets/logo-white.png"></img></a>
 	</div>
 
-
 	<script>
-		var ecg = new Graph({canvasId: 'ecgPlot', color: '#859F10', thickness: '2', background: 'white', colorRefresh: '#859F10'});
-		var ecgBabe = new Graph({canvasId: 'ecgBabePlot', color: '#1876EF', thickness: '2', background: 'white', colorRefresh: '#1876EF'});
+                var SigA = new Graph({canvasId: 'SignalFirst', color: '#859F10', thickness: '2', background: 'white', colorRefresh: '#859F10'});
+		var SigB = new Graph({canvasId: 'SignalSecond', color: '#1876EF', thickness: '2', background: 'white', colorRefresh: '#1876EF'});
 		//var spo2 = new Graph({canvasId: 'spo2Plot', color: '#B92312', thickness: '2', background: 'white', colorRefresh: '#B92312'});
-
 		waitToPaint(0);
-
 		function waitToPaint(value)
 		{
 			value++;
+                        
 			if (value === 360)
 			{
 				value = 0;
@@ -67,16 +67,12 @@
 				paintPoint(value);
 			}, 10);
 		}
-
 		function paintPoint(value)
 		{
-			//ecgBabe.drawNewData(value + 30);
-                        ecgBabe.drawNewData(60+Math.sin(value * (Math.PI / 180))*50);
-			//spo2.drawNewData(value + 30);
+                        SigB.drawNewData(60+Math.sin(value * (Math.PI / 180))*50);
 			waitToPaint(value);
 		}
 		var host = window.document.location.host.replace(/:.*/, '');
-
 		var ws = new WebSocket('ws://' + host + ':8081');
 		
 		ws.onopen = function (event) {
@@ -86,13 +82,28 @@
 		
 		ws.onmessage = function (event) {
 			var msg = JSON.parse(event.data);
+                     //   var time=0;
+                        
             if(msg.counter !== undefined)
-				ecg.drawNewData(parseInt(msg.counter));
-		};
-                 
-                 
+
+		SigA.drawNewData(parseInt(msg.counter));                                  
+                                
+            var counter = [];
+            var NotchPoints = [];
+            var i;
+            var j;
+            for (i=0;i<3;i++){
+                counter[i]=parseInt(msg.counter);
+                Fnotch=(0.98968682357708074*counter[0])+(-1.8537292902972045*counter[1])+(0.9968682357708074*counter[2])-(-1.8537292902972045*1)-(0.9937364715416148*1);
+            
+            for (j=0;j<2000;j++){
+               NotchPoints[j]=Fnotch;
+               console.log(parseInt(Fnotch));
+            }
+
+            }
+            
+         };
+    
 	</script>
-
-     
-
 </body>
