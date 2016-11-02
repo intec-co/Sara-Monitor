@@ -51,9 +51,20 @@
     </div>
 
     <script>
+        var countTime = 0;
+        var sample = [];
+        var NotchMoment =0;
+        var NotchVariable=[];
+        var NotchVariablePre =[];
+        var NotchTimePre =[];
+        var Fnotch=[];
+        var time =0;
+        var NotchTime =[];
+            var x=0;
+            
         var SigA = new Graph({canvasId: 'SignalFirst', color: '#859F10', thickness: '2', background: 'white', colorRefresh: '#859F10'});
         var SigB = new Graph({canvasId: 'SignalSecond', color: '#1876EF', thickness: '2', background: 'white', colorRefresh: '#1876EF'});
-        //var spo2 = new Graph({canvasId: 'spo2Plot', color: '#B92312', thickness: '2', background: 'white', colorRefresh: '#B92312'});
+      
         waitToPaint(0);
         function waitToPaint(value)
         {
@@ -69,9 +80,11 @@
         }
         function paintPoint(value)
         {
-            SigB.drawNewData(60 + Math.sin(value * (Math.PI / 180)) * 50);
-            waitToPaint(value);
-        }
+           SigB.drawNewData(60 + Math.sin(value * (Math.PI / 180)) * 50);
+           waitToPaint(value);
+       }
+
+       
         var host = window.document.location.host.replace(/:.*/, '');
         var ws = new WebSocket('ws://' + host + ':8081');
 
@@ -82,13 +95,47 @@
 
         ws.onmessage = function (event) {
             var msg = JSON.parse(event.data);
-            //   var time=0;
+
             if (msg.counter !== undefined){
-                SigA.drawNewData(parseInt(msg.counter));
+               // SigB.drawNewData(parseInt(msg.counter));
+                
+                sample=parseInt(msg.counter);
+                countTime = countTime+1;
+                time =countTime/2000;
+       
+                if (countTime<3){  
+                    
+                  NotchVariable[countTime]=sample;
+                  NotchTime[countTime]=time;
+                  Fnotch[countTime]=sample;
+                  
+                }
+                 else{
+                     
+                    NotchVariable[3]=sample;
+                    NotchTime[3]=time;
+                    Fnotch[countTime]=(0.9968682357708074*NotchVariable[1])+(-1.8537292902972045*NotchVariable[2])+(0.9968682357708074*NotchTime[3])-(-1.8537292902972045*NotchTime[2])-(0.9937364715416148*NotchTime[1]);
+
+                    NotchVariablePre = NotchVariable;
+                    NotchVariable = [];
+                    NotchVariable[2]=NotchVariablePre[3];
+                    NotchVariable[1]=NotchVariablePre[2];
+                    
+                    NotchTimePre = NotchTime;
+                    NotchTime[2]=NotchTimePre[3];
+                    NotchTime[1]=NotchTimePre[2];
+
+                 
+                function paintPointA(Fnotch,countTime) {
+                   x=Math.abs(Fnotch[countTime]);
+                   SigA.drawNewData(parseInt(x));
+               }
+                 paintPointA(Fnotch,countTime);
+                }   
+               
             }
-
-
-
+          
+            
         };
 
     </script>
