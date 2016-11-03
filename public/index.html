@@ -41,7 +41,7 @@
         </form>
     </div>
 
-    <canvas id="SignalSecond" width="1200" height="250" style="border:1px solid #000000; margin-top:16;">
+    <canvas id="SignalSecond" width="1200" height="600" style="border:1px solid #000000;"> 
     </canvas> 
 
     <!-- Logos -->
@@ -51,38 +51,36 @@
     </div>
 
     <script>
-        var countTime = 0;
+        var i = 0;
         var sample = [];
-        var NotchMoment =0;
-        var NotchVariable=[];
-        var NotchVariablePre =[];
-        var NotchTimePre =[];
-        var Fnotch=[];
-        var time =0;
-        var NotchTime =[];
-            var x=0;
-            
+        var x = [];
+        var x_pre = [];
+        var y = [];
+        var y_tmp = 0;
+        var a = [1, -1.7636, 0.8100];
+        var b = [1, -1.8596, 1.000];    
+    
         var SigA = new Graph({canvasId: 'SignalFirst', color: '#859F10', thickness: '2', background: 'white', colorRefresh: '#859F10'});
         var SigB = new Graph({canvasId: 'SignalSecond', color: '#1876EF', thickness: '2', background: 'white', colorRefresh: '#1876EF'});
       
-        waitToPaint(0);
-        function waitToPaint(value)
-        {
-            value++;
+        //waitToPaint(0);
+        //function waitToPaint(value)
+        //{
+        //    value++;
 
-            if (value === 360)
-            {
-                value = 0;
-            }
-            setTimeout(function () {
-                paintPoint(value);
-            }, 10);
-        }
-        function paintPoint(value)
-        {
-           SigB.drawNewData(60 + Math.sin(value * (Math.PI / 180)) * 50);
-           waitToPaint(value);
-       }
+        //    if (value === 360)
+        //    {
+        //        value = 0;
+        //   }
+        //    setTimeout(function () {
+        //        paintPoint(value);
+        //    }, 10);
+        //}
+        //function paintPoint(value)
+        //{
+          // SigB.drawNewData(60 + Math.sin(value * (Math.PI / 180)) * 50);
+          // waitToPaint(value);
+       //}
 
        
         var host = window.document.location.host.replace(/:.*/, '');
@@ -100,38 +98,50 @@
                // SigB.drawNewData(parseInt(msg.counter));
                 
                 sample=parseInt(msg.counter);
-                countTime = countTime+1;
-                time =countTime/2000;
-       
-                if (countTime<3){  
-                    
-                  NotchVariable[countTime]=sample;
-                  NotchTime[countTime]=time;
-                  Fnotch[countTime]=sample;
-                  
+                
+                function paintPointA(sample) {
+                  SigA.drawNewData(parseInt(sample));
                 }
-                 else{
-                     
-                    NotchVariable[3]=sample;
-                    NotchTime[3]=time;
-                    Fnotch[countTime]=(0.9968682357708074*NotchVariable[1])+(-1.8537292902972045*NotchVariable[2])+(0.9968682357708074*NotchTime[3])-(-1.8537292902972045*NotchTime[2])-(0.9937364715416148*NotchTime[1]);
+                paintPointA(sample);
+                
+                //console.log("i="+i);
+                console.log("sample="+sample);
+                if ( i >= 4){
+                    x_pre= [];
+                    x_pre = x;
+                    x = [];
+                    x[2]= sample;
+                    x[1]= x_pre[2];
+                    x[0]= x_pre[1];
+                    y[i]=b[0]*x[2]+b[1]*x[1]+b[2]*x[0]-a[1]*y[i-1]-a[2]*y[i-2];
+                }
+                else if (i===0){
+                    y[i]=0;
+                }
+                else if (i===1){
+                    x[0]=sample;
+                    y[i]=b[0]*x[0];
+                }
+                else if (i===2){
+                    x[1]=sample;
+                    y[i]=b[0]*x[1]+b[1]*x[0]-a[1]*y[i-1];
+                }
+                else if (i===3){
+                    x[2]=sample;
+                    y[i]=b[0]*x[2]+b[1]*x[1]+b[2]*x[0]-a[1]*y[i-1]-a[2]*y[i-2];
+                }
+                
+                //console.log("x="+x);
+                console.log("y="+y[i]);
+                              
+                y_tmp=y[i];
+                console.log("y_tmp="+y_tmp);//}
 
-                    NotchVariablePre = NotchVariable;
-                    NotchVariable = [];
-                    NotchVariable[2]=NotchVariablePre[3];
-                    NotchVariable[1]=NotchVariablePre[2];
-                    
-                    NotchTimePre = NotchTime;
-                    NotchTime[2]=NotchTimePre[3];
-                    NotchTime[1]=NotchTimePre[2];
-
-                 
-                function paintPointA(Fnotch,countTime) {
-                   x=Math.abs(Fnotch[countTime]);
-                   SigA.drawNewData(parseInt(x));
-               }
-                 paintPointA(Fnotch,countTime);
-                }   
+                function paintPointB(y_tmp) {
+                   SigB.drawNewData(parseInt(y_tmp));
+                }
+                paintPointB(y_tmp);
+                i = i+1;   
                
             }
           

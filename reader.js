@@ -14,7 +14,7 @@ ws.on('open', function sendSignalData() {
     var interval=setInterval(function () {
         var msg = {counter: counter, action: 'data'};
         ws.send(JSON.stringify(msg));
-        angle+=21;
+        angle+=21.6;
         counter =70+ Math.sin(angle * (Math.PI / 180))*30;
         
         angle2+=0.36;
