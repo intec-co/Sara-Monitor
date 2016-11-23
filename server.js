@@ -1,6 +1,7 @@
 'use strict';
 var port = 8081;
 var http = require('http');
+var net = require('net');
 var url = require("url");
 var httpGet = require('./mod/httpGet');
 var ws = require("./mod/ws");
@@ -17,7 +18,7 @@ var server = http.createServer(function (request, response) {
 		});
 		request.on('end', function () {
 			console.log(data);
-			response.writeHead(200, {'Content-Type': 'text/json'});
+			response.writeHead(200, { 'Content-Type': 'text/json' });
 			response.write("JSON.stringify(obj)");
 			response.end();
 		});
@@ -30,12 +31,27 @@ var server = http.createServer(function (request, response) {
 			response.setHeader('Location', request.url + "/");
 			response.end();
 		} else
-			httpGet(response, pathComp, {compress: false, minify: false});
+			httpGet(response, pathComp, { compress: false, minify: false });
 	}
+});
+
+var serverEEG = net.createServer(function (socket) {
+	console.log('CONNECTED: ' + socket.remoteAddress + ':' + socket.remotePort);
+	socket.on('data', function (data) {
+		console.log("" + data);
+		socket.write(data);
+	});
+
+	socket.on('close', function (data) {
+		console.log('CLOSED: ' + socket.remoteAddress + ' ' + socket.remotePort);
+	});
 });
 
 server.listen(port, function () {
 	console.log('Running server 1.0 in port:', port);
-	console.log(new Date);
 	ws(server);
+});
+
+serverEEG.listen(33600, function () {
+	console.log('Running server socket in port:', port);
 });

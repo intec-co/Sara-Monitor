@@ -4,7 +4,9 @@
 	"keywords": ["util", "functional", "server", "client", "browser"],
 	"author": "cavargasp",
 	"contributors": [],
-	"dependencies": {},
+	"dependencies": {
+		"minify":"*"
+	},
 	"scripts": {
 		"start": "node server.js"
 	}
