@@ -52,6 +52,6 @@ server.listen(port, function () {
 	ws(server);
 });
 
-serverEEG.listen(33600, function () {
-	console.log('Running server socket in port:', port);
+serverEEG.listen(8080, function () {
+	console.log('Running server socket in port: 8080');
 });

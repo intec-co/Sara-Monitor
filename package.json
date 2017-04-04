@@ -1,14 +1,19 @@
 {
 	"name": "MonitorFetal",
 	"version": "1.0.0",
-	"keywords": ["util", "functional", "server", "client", "browser"],
+	"keywords": [
+		"util",
+		"functional",
+		"server",
+		"client",
+		"browser"
+	],
 	"author": "cavargasp",
 	"contributors": [],
 	"dependencies": {
-		"minify":"*"
+		"ws": "*"
 	},
 	"scripts": {
 		"start": "node server.js"
 	}
-
 }
