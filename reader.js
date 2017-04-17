@@ -14,14 +14,15 @@ var buffer = "";
 //var ws = new WebSocket('ws://' + host + ':8081');
 //var fs = require('fs');
 
-const client = net.createConnection({ port: 80, host: "168.176.61.45" }, () => {
+const client = net.createConnection({ port: 8080, host: "localhost" }, () => {
 	//'connect' listener
 	console.log('connected to server!');
-	//client.write('world!\r\n');
+	client.write('world!\r\n');
 });
 client.on('data', (data) => {
-	buffer += data;
-	console.log(data.readInt16BE(0, 3));
+	var array = new Int32Array(data);
+	console.log(array[0]);
+	//console.log(data.readInt16BE(0, 3));
 	//client.end();
 });
 client.on('end', () => {
