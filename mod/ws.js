@@ -26,18 +26,14 @@ module.exports = function (server) {
         });
         ws.on('message', function (message) {
             console.log(">>"+message);
-            
             var iMsg = JSON.parse(message);
-            
             switch (iMsg.action)
             {
-                case 'register':
-                    
+                case 'register':                    
                     if (iMsg.type === 'reader') {
                         reader = ws;
                     } else if (iMsg.type === 'viewer') {
-                        viewer = this;
-                        
+                        viewer = this;                        
                     }
                     console.log(">>>"+viewer);
                     break;
@@ -46,7 +42,8 @@ module.exports = function (server) {
                     if(viewer!==undefined){
                         viewer.send(message);
                     }
-
+                    
+                    
                     break;
             }
         });

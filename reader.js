@@ -14,7 +14,7 @@ var buffer = "";
 //var ws = new WebSocket('ws://' + host + ':8081');
 //var fs = require('fs');
 
-const client = net.createConnection({ port: 8080, host: "localhost" }, () => {
+const client = net.createConnection({ port: 8085, host: "localhost" }, () => {
 	//'connect' listener
 	console.log('connected to server!');
 	client.write('world!\r\n');
