@@ -60,8 +60,7 @@ wsServer.on('request', function (request) {
         });
         client.on('data', function (data) {
             var array = new Int32Array(data);
-            console.log(array[0]);
-            connection.send(array[0]);
+            connection.send(array);
             //console.log(data.readInt16BE(0, 3));
             //client.end();
         });

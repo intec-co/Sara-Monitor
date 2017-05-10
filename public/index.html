@@ -1,5 +1,4 @@
 <head>
-    <script src="linePlot.js"></script>
     <link rel="stylesheet" type="text/css" href="Style.css">
     <title>Monitor Materno Fetal | Cim@lab</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,25 +8,27 @@
 <body>
     <!--SIGNAL 1-->
     <div id="SignalIdentifier">
-        <h4 class="deriva">Seleccionar señal | </h4>
+        <h4 class="deriva">Seleccionar señal | 
 
-        <form id="SignalA" action="demo_form.asp" method="get">
-            <input list="momSignal">
-            <datalist id="momSignal">
-                <option id="formtext" value="Derivación 1"></option>
-                <option value="Derivación 2"></option>
-                <option value="Derivación 3"></option>
-                <option value="Derivación 4"></option>
-            </datalist>
-        </form>
+            <select id="signalSelector">
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>                
+            </select>
+        </h4>
+
     </div>
 
-    <canvas id="SignalFirst" width="1200" height="250" style="border:1px solid #000000;">
-
-    </canvas>
+    <button id="myBtn" onclick="getSignal()">Iniciar</button>
+    <canvas id="SignalFirst" width="1200" height="250" style="border:1px solid #000000;"></canvas>
 
     <!-- SIGNAL 2 -->
-    <div id="SignalIdentifier">
+    <!--<div id="SignalIdentifier">
         <h4 class="deriva">Seleccionar señal | </h4>
 
         <form id="SignalB" action="demo_form.asp" method="get">
@@ -42,16 +43,18 @@
     </div>
 
     <canvas id="SignalSecond" width="1200" height="250" style="border:1px solid #000000;">
-    </canvas>
+    </canvas>-->
 
     <!-- Logos -->
     <div id="something">
-        <a href="http://cimlaboratory.com" target="_blank"><img id="logos" src="Assets/cimalabwhite.png"></img></a>
-        <a href="http://www.telemedicina.unal.edu.co/" target="_blank"><img id="logos" src="Assets/logo-white.png"></img></a>
+        <a href="http://cimlaboratory.com" target="_blank"><img id="logos" src="Assets/cimalabwhite.png" /></a>
+        <a href="http://www.telemedicina.unal.edu.co/" target="_blank"><img id="logos" src="Assets/logo-white.png" /></a>
     </div>
 
-    <button id="myBtn" onclick="connect()">Algo</button>
-
+    
+    
+    <script src="linePlot.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
         var i = 0;
         var sample = [];
@@ -62,60 +65,54 @@
         var a = [1, -1.6736, 0.8100];
         var b = [1, -1.8596, 1.000];
         var SigA = new Graph({canvasId: 'SignalFirst', color: '#859F10', thickness: '2', background: 'white', colorRefresh: '#859F10'});
-        var SigB = new Graph({canvasId: 'SignalSecond', color: '#1876EF', thickness: '2', background: 'white', colorRefresh: '#1876EF'});
-        //waitToPaint(0);
-        //function waitToPaint(value)
-        //{
-        //    value++;
+        //var SigB = new Graph({canvasId: 'SignalSecond', color: '#1876EF', thickness: '2', background: 'white', colorRefresh: '#1876EF'});
 
-        //    if (value === 360)
-        //    {
-        //        value = 0;
-        //   }
-        //    setTimeout(function () {
-        //        paintPoint(value);
-        //    }, 10);
-        //}
+        var signalId=0;
+        /*function paintPointA(sample) {
+         SigA.drawNewData(parseInt(sample));
+         }
+         
+         function paintPointB(y, i) {
+         SigB.drawNewData(parseInt(y[i]));
+         }*/
 
-        function paintPoint(value)
-        {
-            SigB.drawNewData(60 + Math.sin(value * (Math.PI / 180)) * 50);
-            //SigB.drawNewData(value);
+        function paintPoint(value, canvas) {
+            canvas.drawNewData(parseInt(value));
         }
 
-        function paintPointA(sample) {
-            SigA.drawNewData(parseInt(sample));
-        }
-
-        function paintPointB(y, i) {
-            SigB.drawNewData(parseInt(y[i]));
-        }
-
+        /*function clearCanvas() {
+            SigA.clearCanvas();
+        }*/
 
         var host = window.document.location.host.replace(/:.*/, '');
         var ws = new WebSocket('ws://' + host + ':8081');
-        var obj = {action: 'register', type: 'viewer'};
+
 
         ws.onopen = function (event) {
         };
 
         ws.onmessage = function (event) {
-            //paintPoint(event.data);
-            var sample=event.data;
-            paintPointA(sample);
+            var array = (event.data).split(",");
+            paintPoint(array[signalId], SigA);
 
-            y=applyNotchFilter(sample);
-            paintPointB(y, i);
+            y = getNotchFilteredSample(array[signalId]);
+            paintPoint(y[i], SigB);
 
             i++;
         };
 
-        function connect() {
+        function getSignal() {
+            var obj = {operation:'start'};
             ws.send(JSON.stringify(obj));
         }
-        
-        function applyNotchFilter(sample){
-            
+
+        $("#signalSelector").on("change", function () {
+            //getSignal();
+            signalId=$("#signalSelector").val();
+        });
+
+        function getNotchFilteredSample(sample) {
+
             if (i >= 4) {
                 x_pre = [];
                 x_pre = x;
@@ -137,7 +134,7 @@
                 y[i] = b[0] * x[2] + b[1] * x[1] + b[2] * x[0] - a[1] * y[i - 1] - a[2] * y[i - 2];
             }
             return y;
-            
+
         }
 
 
